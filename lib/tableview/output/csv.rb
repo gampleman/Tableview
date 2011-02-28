@@ -2,10 +2,15 @@ module Tableview::Ouput
   class CSV
     require 'csv'
     def process(tv)
-      @table = CSV.generate("") { |csv|
+      @table = ::CSV.generate("") { |csv|
         tv.parts.each do |part|
           part.rows.each do |row|
-            csv << row.cells.map {|cell| cell.contents }
+            r = []
+            row.cells.each do |cell| 
+              r << cell.contents
+              r += [nil] * (cell.options[:colspan] - 1) if cell.options[:colspan]
+            end
+            csv << r
           end
         end
       }

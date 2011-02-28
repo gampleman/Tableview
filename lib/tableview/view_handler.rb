@@ -5,7 +5,8 @@ module Tableview
     
     def self.table(opts = {}, &block)
       ret = Table.new opts
-      ret.instance_eval &block
+      #ret.instance_eval &block
+      yield(ret)
       ret
     end
     
@@ -30,7 +31,7 @@ module Tableview
         added = @added
         @added = true
         @current_part = obj.new opts
-        @current_part.instance_eval &block
+        yield @current_part
         self.parts << @current_part
         @current_part = prev
         @added = added
@@ -41,8 +42,8 @@ module Tableview
       end
 
       def header_row(opts = {}, &block)
-        self.header do
-          row opts, &block
+        self.header do |table|
+          table.row opts, &block
         end
       end
 
@@ -51,8 +52,8 @@ module Tableview
       end
 
       def footer_row(opts = {}, &block)
-        self.footer do
-          row opts, &block
+        self.footer do |t|
+          t.row opts, &block
         end
       end
 
@@ -78,7 +79,7 @@ module Tableview
       
       def row(opts = {}, &block)
         row = Row.new opts
-        row.instance_eval &block
+        yield row
         self.rows << row
       end
     end
@@ -103,9 +104,9 @@ module Tableview
       end
       
       def cell(*contents)
-        #opts = contents.extract_options!.symbolize_keys
+        opts = contents.extract_options!.symbolize_keys
         contents.each do |c|
-          self.cells << Cell.new(c, {})
+          self.cells << Cell.new(c, opts)
         end
       end
 

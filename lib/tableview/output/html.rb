@@ -32,7 +32,8 @@ module Tableview::Ouput
     end
     
     def tag(tag, attributes = {})
-      @table += "\n#{" "*@p}<#{tag}>"
+      atrs = attributes.map {|k,v| " #{k}=\"#{v}\"" }.join
+      @table += "\n#{" "*@p}<#{tag}#{atrs}>"
       @p += 2
       yield
       @p -= 2

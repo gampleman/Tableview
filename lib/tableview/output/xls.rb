@@ -27,7 +27,7 @@ module Tableview::Ouput
           row.cells.each_with_index do |cell, i|
             format = Spreadsheet::Format.new style.merge(cell.options)
             sheet1[offset, i] = cell.contents
-            sheet1[offset, i].set_format format
+            sheet1.row(offset).set_format i, format
           end
           offset += 1
         end
@@ -37,7 +37,7 @@ module Tableview::Ouput
     
     def to_s
       io = StringIO.new
-      xls.write(io)
+      @table.write(io)
       io.rewind
       string = io.read
     end
