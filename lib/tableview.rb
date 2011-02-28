@@ -5,7 +5,7 @@ Mime::Type.register "text/plain", :ascii
 
 require 'tableview/tv'
 require 'tableview/view_handler'
-
+require 'tableview/responder'
 
 
 ActionView::Template.register_template_handler 'tv', Tableview::TV.new

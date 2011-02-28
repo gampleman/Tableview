@@ -1,5 +1,8 @@
+require 'tableview/helper'
 module Tableview
   class ViewHandler
+    
+    include Tableview::Helper
     
     attr_reader :table
     
@@ -24,6 +27,10 @@ module Tableview
         self.parts = []
         @current_part = Body.new
         @added = false
+      end
+      
+      def config(opts)
+        self.options = opts
       end
       
       def part(obj, opts, &block)

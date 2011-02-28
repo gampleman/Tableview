@@ -3,7 +3,7 @@ module Tableview::Ouput
     def process(tv)
       @table = ""
       @p = 0
-      tag :table do
+      tag :table, tv.options do
         
         tv.parts.each do |part|
           tag (case part.class.to_s
@@ -14,13 +14,13 @@ module Tableview::Ouput
             :tfoot
           when "Tableview::ViewHandler::Body"
             :tbody
-          end) do 
+          end), part.options do 
         
             part.rows.each do |row|
-              tag :tr do
+              tag :tr, row.options do
                 row.cells.each do |cell|
                   tag( header || cell.options[:header] ? :th : :td, cell.options) do 
-                    @table += cell.contents.to_s
+                    @table += ERB::Util::html_escape(cell.contents.to_s)
                   end #td / #th
                 end
               end #tr
@@ -41,7 +41,7 @@ module Tableview::Ouput
     end
     
     def to_s
-      @table.to_s
+      @table.html_safe.to_s
     end
     
   end
