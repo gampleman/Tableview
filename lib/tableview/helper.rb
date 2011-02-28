@@ -1,13 +1,5 @@
 module Tableview::Helper
   
-  def setup(p)
-    @param = p
-  end
-  
-  def format
-    @format ||= Format.new(@param)
-  end
-  
   class Format
     def initialize(p)
       @params = p
@@ -18,7 +10,7 @@ module Tableview::Helper
     end
     
     def method_missing(name, args, &blk)
-      if m = name.match /^(.+)\?$/
+      if m = name.match(/^(.+)\?$/)
         @params[:format] == m.captures.first
       else
         super

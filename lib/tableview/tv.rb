@@ -2,9 +2,8 @@ module Tableview
   class TV 
     def call(template)
       %{
-        
+        format = Tableview::Helper::Format.new(params)
         tv = Tableview::ViewHandler.table do |table|
-          setup params
           #{template.source}
         end
         output = Tableview::output_class(params[:format]).new

@@ -2,7 +2,7 @@ require 'tableview/helper'
 module Tableview
   class ViewHandler
     
-    include Tableview::Helper
+    
     
     attr_reader :table
     

@@ -1,7 +1,7 @@
 module Tableview::Ouput
   class XLS
     require 'spreadsheet'
-    HEADER_STYLE = {:align => :center, :weight => :bold, :size => 16}
+    HEADER_STYLE = {:align => :center, :weight => :bold, :size => 12}
     FOOTER_STYLE = {:weight => :bold }
     
     def process(tv)

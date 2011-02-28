@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   
   s.add_dependency "terminal-table", "~> 1.4"
   s.add_dependency "spreadsheet", "~> 0.6"
-  s.add_dependency "rails", "~> 3.0"
+  #s.add_dependency "rails", "~> 3.0"
   
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact
