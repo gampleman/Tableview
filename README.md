@@ -42,3 +42,5 @@ Then create a partial named `_table.tv` in which you can use a DSL like this to 
         row.cell post.body if format.xls?
       end
     end
+    
+This partial will be used to render your view 

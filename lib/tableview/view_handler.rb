@@ -10,6 +10,7 @@ module Tableview
       ret = Table.new opts
       #ret.instance_eval &block
       yield(ret)
+      ret.create_table!
       ret
     end
     
@@ -27,6 +28,11 @@ module Tableview
         self.parts = []
         @current_part = Body.new
         @added = false
+        @headers, @procs = [], []
+      end
+      
+      def table_for(s)
+        @collection = s
       end
       
       def config(opts)
@@ -75,6 +81,43 @@ module Tableview
         end
         @current_part.send :row, opts, &block
       end
+      
+      def column(title, opts = {}, header_opts = {}, row_opts = {}, &block)
+        if title.is_a? Symbol
+          method = title unless block_given?
+          title = I18n.translate("activerecord.attributes.#{@collection.klass.name.downcase}.#{title}")
+        end
+        if block_given?
+          proc = block#lambda { |val| block.call(val) }
+        else
+          proc = lambda { |val| val.send(method) }
+        end
+        
+        @headers << Cell.new(title, opts.merge(header_opts))
+        @procs << proc
+        @column_based = true
+      end
+      
+      def columns(*titles)
+        titles.each do |title|
+          self.column title
+        end
+      end
+      
+      def create_table!
+        return unless @column_based
+        header_row do |row|
+          row.cells = @headers
+        end
+        @collection.each do |el|
+          row do |r|
+            @procs.each do |proc|
+              r.cell proc.call(el)
+            end
+          end
+        end
+      end
+      
     end
   
     class Part < TablePiece
