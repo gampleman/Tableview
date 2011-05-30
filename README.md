@@ -11,7 +11,7 @@ Installation
 In your Gemfile:
 
 
-    gem 'tablevie'
+    gem 'tableview'
      
 then
 
@@ -43,4 +43,15 @@ Then create a partial named `_table.tv` in which you can use a DSL like this to 
       end
     end
     
-This partial will be used to render your view 
+This partial will be used to render your view.
+
+### NEW! ###
+
+We now have a column based DSL.
+
+    table.table_for @events
+    
+    # uses I18n for header and calls the symbol as a method on the object
+    table.columns :first_name, :last_name 
+    # Uses first arg as header, and evaluates block for each row
+    table.column("E-mail address") {|event| format.html? link_to event.email : event.email }
