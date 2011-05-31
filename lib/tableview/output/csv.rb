@@ -1,4 +1,4 @@
-module Tableview::Ouput
+module Tableview::Output
   class CSV
     require 'csv'
     def process(tv)

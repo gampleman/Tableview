@@ -6,7 +6,8 @@ module Tableview
     
     attr_reader :table
     
-    def self.table(opts = {}, &block)
+    def self.dsl(opts = {}, &block)
+      puts "self.dsl called"
       ret = Table.new opts
       #ret.instance_eval &block
       yield(ret)
@@ -22,13 +23,13 @@ module Tableview
     end
   
     class Table < TablePiece
-      attr_accessor :parts
+      attr_accessor :parts, :subtables, :title
       def initialize(*args)
         super *args
         self.parts = []
         @current_part = Body.new
         @added = false
-        @headers, @procs = [], []
+        @headers, @procs, @subtables = [], [], []
       end
       
       def table_for(s)
@@ -104,8 +105,28 @@ module Tableview
         end
       end
       
+      def generate_subtable_for(subcollection, title = nil)
+        t = Table.new
+        t.title = title
+        t.header_row do |row|
+          row.cells = @headers
+        end
+        t.body do |b|
+          subcollection.each do |el|
+            b.row do |r|
+              @procs.each do |proc|
+                r.cell proc.call(el)
+              end
+            end
+          end
+        end # body
+        @subtables << t
+        @table_generated = true
+      end
+      
       def create_table!
         return unless @column_based
+        return if @table_generated
         header_row do |row|
           row.cells = @headers
         end
@@ -116,6 +137,7 @@ module Tableview
             end
           end
         end
+        @subtables << self
       end
       
     end
@@ -135,15 +157,12 @@ module Tableview
     end
   
     class Header < Part
-    
     end
   
     class Body < Part
-    
     end
   
     class Footer < Part
-    
     end
   
     class Row < TablePiece

@@ -9,8 +9,9 @@ module Tableview::Helper
       @params[:format] == :html || @params[:format].blank?
     end
     
-    def method_missing(name, args, &blk)
-      if m = name.match(/^(.+)\?$/)
+    def method_missing(name, *args, &blk)
+      if m = name.to_s.match(/^(.+)\?$/)
+        puts m.inspect, name.inspect
         @params[:format] == m.captures.first
       else
         super

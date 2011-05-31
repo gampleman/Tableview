@@ -1,34 +1,37 @@
-module Tableview::Ouput
+module Tableview::Output
   class HTML
     def process(tv)
       @table = ""
       @p = 0
-      tag :table, tv.options do
+      tv.subtables.each do |sub|
+        tag :h2, sub.title unless sub.title.blank?
+        tag :table, sub.options do
         
-        tv.parts.each do |part|
-          tag (case part.class.to_s
-          when "Tableview::ViewHandler::Header"
-            header = true
-            :thead
-          when "Tableview::ViewHandler::Footer"
-            :tfoot
-          when "Tableview::ViewHandler::Body"
-            :tbody
-          end), part.options do 
+          sub.parts.each do |part|
+            tag (case part.class.to_s
+            when "Tableview::ViewHandler::Header"
+              header = true
+              :thead
+            when "Tableview::ViewHandler::Footer"
+              :tfoot
+            when "Tableview::ViewHandler::Body"
+              :tbody
+            end), part.options do 
         
-            part.rows.each do |row|
-              tag :tr, row.options do
-                row.cells.each do |cell|
-                  tag( header || cell.options[:header] ? :th : :td, cell.options) do 
-                    @table += ERB::Util::html_escape(cell.contents.to_s)
-                  end #td / #th
-                end
-              end #tr
-            end
+              part.rows.each do |row|
+                tag :tr, row.options do
+                  row.cells.each do |cell|
+                    tag( header || cell.options[:header] ? :th : :td, cell.options) do 
+                      @table += ERB::Util::html_escape(cell.contents.to_s)
+                    end #td / #th
+                  end
+                end #tr
+              end
 
-          end #t{part}
-        end
-      end #table
+            end #t{part}
+          end
+        end #table
+      end
     end
     
     def tag(tag, attributes = {})

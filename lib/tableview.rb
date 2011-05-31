@@ -18,7 +18,7 @@ module Tableview
     rescue 
       raise NoOuputClassError
     end
-    ("Tableview::Ouput::" + format.to_s.upcase).constantize
+    ("Tableview::Output::" + format.to_s.upcase).constantize
   end
   
   class NoOuputClassError

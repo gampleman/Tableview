@@ -31,27 +31,23 @@ Then add this to your controller:
 
 Then create a partial named `_table.tv` in which you can use a DSL like this to define your table:
 
-    table.header_row do |row|
-      row.cell "First header cell", :align => :right
-      row.cell "You can do", "more cells at once"
+    => @registrations
+    
+    + :first_name
+    + :surname
+    + :address {|reg| reg.address + "\n" + reg.postcode }
+    + :friends if format.html?
+    
+    if format.xls?
+      = @registrations.some_scope, "Workbook title"
+      = @registration.other_scope, "Works as title in other formats as well"
     end
     
-    @posts.each do |post|
-      table.row do |row|
-        row.cell post.title
-        row.cell post.body if format.xls?
-      end
-    end
-    
-This partial will be used to render your view.
+The DSL is a simple superset of ruby with a few special characters (only work if first printable character on line, won't work with eval and friends).
 
-### NEW! ###
-
-We now have a column based DSL.
-
-    table.table_for @events
-    
-    # uses I18n for header and calls the symbol as a method on the object
-    table.columns :first_name, :last_name 
-    # Uses first arg as header, and evaluates block for each row
-    table.column("E-mail address") {|event| format.html? link_to event.email : event.email }
+Character | Meaning
+----------|--------
+ `=>`     | Use the passed collection for rendering and I18n
+ `*`      | Pass a hash to this, is used to configure the formatters.
+ `+`      | Defines a column. If passed a symbol, Tableview will use I18n to lookup the header and call the method on the model to get the value. Strings will be used literally. Optionally use a block to generate values.
+ `=`      | Render a subtable for the passed collection. Not all formatters support subtables, use at own risk (notably the CSV formatter has no support for this). Is meant mainly to have nice full-featured excel files.
