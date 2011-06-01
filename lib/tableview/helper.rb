@@ -10,6 +10,7 @@ module Tableview::Helper
     end
     
     def method_missing(name, *args, &blk)
+      puts m.inspect, name.inspect
       if m = name.to_s.match(/^(.+)\?$/)
         puts m.inspect, name.inspect
         @params[:format] == m.captures.first

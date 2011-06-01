@@ -7,7 +7,6 @@ module Tableview
     attr_reader :table
     
     def self.dsl(opts = {}, &block)
-      puts "self.dsl called"
       ret = Table.new opts
       #ret.instance_eval &block
       yield(ret)
