@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   
   s.add_dependency "terminal-table", "~> 1.4"
   s.add_dependency "spreadsheet", "~> 0.6"
+  s.add_dependency "railties", "~> 3.0"
+  #s.add_dependency "thor",     "~> 0.14"
   #s.add_dependency "rails", "~> 3.0"
   
   s.files        = `git ls-files`.split("\n")
