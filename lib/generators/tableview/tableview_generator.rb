@@ -3,7 +3,8 @@ require 'rails'
 module Tableview
   module Generators
     class TableviewGenerator < ::Rails::Generators::NamedBase
-      
+      namespace "tableview"
+      desc "Generates a partial and some controller code to use tableview."
       def create_partial
         cols = file_name.camelize.constantize.column_names
         template = "=> @#{file_name.tableize}\n\n"

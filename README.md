@@ -16,20 +16,13 @@ In your Gemfile:
 then
 
     $ bundle install
+    $ rails g tableview:install
      
-Create a file in `/lib/application_responder.rb` with:
+To apply to a resource use the built in generator:
 
-    class ApplicationResponder < ActionController::Responder
-      include Tableview::Responder
-    end
-    
-Then add this to your controller:
+    $ rails g tableview resource_name
 
-    require "#{Rails.root}/lib/application_responder"
-    self.responder = ApplicationResponder
-    respond_to :html, :csv, :xls, :ascii, :only => :index
-
-Then create a partial named `_table.tv` in which you can use a DSL like this to define your table:
+This will create a partial named `_table.tv` in which you can use a DSL like this to define your table:
 
     => @registrations
     
@@ -51,3 +44,8 @@ Character | Meaning
  `*`      | Pass a hash to this, is used to configure the formatters.
  `+`      | Defines a column. If passed a symbol, Tableview will use I18n to lookup the header and call the method on the model to get the value. Strings will be used literally. Optionally use a block to generate values.
  `=`      | Render a subtable for the passed collection. Not all formatters support subtables, use at own risk (notably the CSV formatter has no support for this). Is meant mainly to have nice full-featured excel files.
+ 
+It will also add a few lines of code to your controller:
+
+- `self.responder = ApplicationResponder` this sets up the correct code path to use for dynamically rendering all the formats.
+- `respond_to :html, :json, :csv, :xls, :ascii` a list of supported formats. You will want to use `respond_with` as well.

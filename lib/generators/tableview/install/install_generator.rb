@@ -2,7 +2,7 @@ require 'rails'
 
 module Tableview
   module Generators
-    class InstallGenerator < ::Rails::Generator::Base
+    class InstallGenerator < ::Rails::Generators::Base
       desc "Creates the responder file necessary for proper working of the plugin."
       def create_application_responder
         # record do |m|
