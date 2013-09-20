@@ -9,7 +9,7 @@ module Tableview
       source.gsub!(/#{start}\*#{ending}/, 'table.config(\1)')
       %{
         format = Tableview::Helper::Format.new(params)
-        tv = Tableview::ViewHandler.dsl do |table|
+        tv = Tableview::ViewHandler.table do |table|
           #{source}
         end
         output = Tableview::output_class(params[:format]).new

@@ -6,7 +6,7 @@ module Tableview
     
     attr_reader :table
     
-    def self.dsl(opts = {}, &block)
+    def self.table(opts = {}, &block)
       ret = Table.new opts
       #ret.instance_eval &block
       yield(ret)
@@ -82,10 +82,10 @@ module Tableview
         @current_part.send :row, opts, &block
       end
       
-      def column(title, opts = {}, header_opts = {}, row_opts = {}, &block)
+      def column(title, method = nil, opts = {}, &block)
         if title.is_a? Symbol
           method = title unless block_given?
-          title = I18n.translate("activerecord.attributes.#{@collection.klass.name.downcase}.#{title}")
+          title = I18n.translate("activerecord.attributes.#{@collection.klass.name.downcase}.#{title}") 
         end
         if block_given?
           proc = block#lambda { |val| block.call(val) }
@@ -93,7 +93,7 @@ module Tableview
           proc = lambda { |val| val.send(method) }
         end
         
-        @headers << Cell.new(title, opts.merge(header_opts))
+        @headers << Cell.new(title, opts)
         @procs << proc
         @column_based = true
       end
